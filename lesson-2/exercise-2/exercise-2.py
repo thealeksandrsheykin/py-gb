@@ -18,7 +18,7 @@
 
 array = ['в', '5', 'часов', '17', 'минут', 'температура', 'воздуха', 'была', '+5', 'градусов']
 result = list()
-
+"""
 for i, j in enumerate(array):
     # Определим является элемент списка числом
     try:
@@ -40,5 +40,17 @@ for i, j in enumerate(array):
     else:
         result.append(j)
     result.append('"')
+"""
+# Более простое решение
 
+for i in array:
+    # Проверяем является ли элемент списка числом
+    if i.isdigit():
+        # Добавляем в результирующий список, список из кавычек и двухразрядного числа
+        result.extend(['"', f'{int(i):02}', '" '])
+    # Проверяем начинается ли элемент списка с +/- и идет ли число после знака
+    elif (i.startswith('+') or i.startswith('-')) and i[1:].isdigit():
+        result.extend(['"', f'{i[0]}{int(i[1:]):02}', '" '])
+    else:
+        result.append(f'{i} ')
 print(f'{"".join(result)}')
