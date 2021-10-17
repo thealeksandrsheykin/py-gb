@@ -20,9 +20,10 @@ my_list = [57.08, 46.51, 97, 1.2, 100.32, 67.09, 87.91, 24, 12.42, 71.12]
 for i in my_list:
     rub = int(i)
     kop = int(round(i - int(i), 2) * 100)
-    if len(str(kop)) < 2:
-        kop = '0' + str(kop)
-    print(f'"{rub} руб {kop} коп";', end=' ')
+    # if len(str(kop)) < 2:
+    #    kop = '0' + str(kop)
+    # print(f'"{rub} руб {kop} коп";', end=' ')
+    print(f'{rub} руб {kop:02.0f} коп', end=', ')
 print(f'\n')
 
 # Отсортировать список по возрастанию не создавая новый список  и доказать что объект списка после сортировки
