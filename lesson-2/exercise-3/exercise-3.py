@@ -16,11 +16,11 @@ while i < len(array):
         i += 1
         continue
     array.insert(i, '"')
-    if array[i+1].isdigit() and len(array[i+1]) < 2:
-        array[i+1] = '0' + str(var)
-    elif not array[i+1].isdigit() and len(array[i+1]) < 3:
-        array[i+1] = array[i+1][0] + '0' + str(var)
-    array.insert(i+2, '"')
+    if array[i + 1].isdigit() and len(array[i + 1]) < 2:
+        array[i + 1] = f'{var:02}'  # '0' + str(var)
+    elif not array[i + 1].isdigit() and len(array[i + 1]) < 3:
+        array[i + 1] = array[i + 1][0] + f'{var:02}'  # '0' + str(var)
+    array.insert(i + 2, '"')
     i += 3
 
-print(" ".join(array))
+print(' '.join(array))
