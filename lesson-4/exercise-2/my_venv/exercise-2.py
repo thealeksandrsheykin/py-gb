@@ -13,7 +13,7 @@
 Если в качестве аргумента передали код валюты, которого нет в ответе, вернуть None. Можно ли сделать работу функции не
 зависящей от того, в каком регистре был передан аргумент? В качестве примера выведите курсы доллара и евро.
 """
-
+import re
 import requests
 import xml.etree.ElementTree as ET
 
@@ -22,27 +22,24 @@ def currency_rates(cod_currency):
     result = None
     cod_currency = cod_currency.upper()
     req = requests.get('http://www.cbr.ru/scripts/XML_daily.asp')
-    # Разбиваем строку по слову "Valute"
-    my_list = (req.text).split('<Valute')
+    # С помощью регулярных выражений разбиваем строку и находим нужные нам значения помещая их в кортеж
+    my_list = re.split("<Valute ID=\"R\S+\">", (req.text).replace('</Valute>', ''))
     for i in my_list:
-        # Находим строку в которой содержится наш запрос
         if cod_currency in i:
-            # Находим индексы и преобразовываем строку
-            data = i[i.find('<Name>'):]
-            data = data[:data.find('</Value>')]
-            data = data.replace('<Name>', '')
-            # Разбиваем строку на две переменные (названия валюты,курс)
-            name,result = data.split('</Name><Value>')
+            match = re.search(r'<NumCode>\d+</NumCode>'
+                              r'<CharCode>(\S+)</CharCode>'
+                              r'<Nominal>(\d+)</Nominal>'
+                              r'<Name>(\S+\s+\S+)</Name>'
+                              r'<Value>(\S+)</Value>',i).groups()
+            result = match[3]
+            print(f'На данный момент {match[1]} {match[2].upper()} cтоит {result} руб.')
             break
         else:
-            name = cod_currency
             continue
-    if result:
-        print(f'На данный момент один {name.upper()} cтоит {result} руб.')
-    else:
-        print(f'На данный момент валюты  {name.upper()} не существует.')
-    # Возвращаем курс
+    if not result:
+        print(f'На данный момент валюты  {cod_currency.upper()} не существует.')
     return result
+
 
 
 # Функция, которая парсит xml файл с помощью специализированной библиотеки
@@ -53,10 +50,12 @@ def currency_rates_adv(cod_currency):
     req = requests.get('http://www.cbr.ru/scripts/XML_daily.asp')
     tree = ET.fromstring(req.text)
     for i in tree.iter('Valute'):
-        my_dict[i[1].text] = {'Name':i[3].text,'Value':i[4].text}
+        my_dict[i[1].text] = {'Nominal':i[2].text,'Name':i[3].text,'Value':i[4].text}
     if my_dict.get(cod_currency, None):
+        nominal = my_dict[cod_currency]["Nominal"]
+        name = (my_dict[cod_currency]["Name"]).upper()
         result = my_dict[cod_currency]["Value"]
-        print(f'На данный момент один {(my_dict[cod_currency]["Name"]).upper()} cтоит {result} руб.')
+        print(f'На данный момент {nominal} {name} cтоит {result} руб.')
     else:
         print(f'На данный момент валюты  {cod_currency.upper()} не существует.')
     return result
