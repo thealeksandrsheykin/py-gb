@@ -8,3 +8,11 @@
 
 """
 
+from utils import currency_rates
+
+currency = input('Введите код валюты: ')
+my_dict = currency_rates(currency)
+
+print(f'На {my_dict["Date"]}: {my_dict["Nominal"]} {(my_dict["Name"]).upper()} cтоит {my_dict["Value"]} руб.')
+
+
