@@ -26,13 +26,14 @@ def currency_rates(cod_currency):
     my_list = re.split("<Valute ID=\"R\S+\">", (req.text).replace('</Valute>', ''))
     for i in my_list:
         if cod_currency in i:
+            print(i)
             match = re.search(r'<NumCode>\d+</NumCode>'
-                              r'<CharCode>(\S+)</CharCode>'
+                              r'<CharCode>\S+</CharCode>'
                               r'<Nominal>(\d+)</Nominal>'
-                              r'<Name>(\S+\s+\S+)</Name>'
-                              r'<Value>(\S+)</Value>',i).groups()
-            result = match[3]
-            print(f'На данный момент {match[1]} {match[2].upper()} cтоит {result} руб.')
+                              r'<Name>(.*)</Name>'
+                              r'<Value>(.*)</Value>',i).groups()
+            result = match[2]
+            print(f'На данный момент {match[0]} {match[1].upper()} cтоит {result} руб.')
             break
         else:
             continue
