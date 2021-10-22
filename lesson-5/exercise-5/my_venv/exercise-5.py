@@ -26,5 +26,11 @@ print(f'''
 Результат: {result}''')
 
 print(f'{24*"-"}')
+result = list()
 
-
+start = perf_counter()
+result = [i for i in src if src.count(i) == 1]
+print(f'''
+Время выполнения: {perf_counter()-start}
+Список занимает в памяти: {sys.getsizeof(result)}
+Результат: {result}''')
