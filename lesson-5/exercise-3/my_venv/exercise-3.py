@@ -21,7 +21,8 @@ klasses = ['9А', '7В', '9Б', '9В', '8Б', '10А', '10Б', '9А']
 Подумать, в каких ситуациях генератор даст эффект.
 
 """
-
+import sys
+from time import perf_counter
 from itertools import zip_longest
 
 def my_gen(tutors, klasses):
@@ -35,16 +36,27 @@ def my_gen(tutors, klasses):
 tutors  = ['Иван', 'Анастасия', 'Петр', 'Сергей', 'Дмитрий', 'Борис', 'Елена','Александр','Юлия', 'Мария']
 klasses = ['9А', '7В', '9Б', '9В', '8Б', '10А', '10Б', '9А']
 
+start = perf_counter()
 gen_1 = my_gen(tutors,klasses)
-print(type(gen_1))
+print(f'''
+Время создания GEN_1: {perf_counter()-start}
+Тип объекта GEN_1: {type(gen_1)}.
+Генератор GEN_1 занимет в памяти: {sys.getsizeof(gen_1)}
+''')
+
 
 for i in range(0,len(tutors)):
     print(next(gen_1))
 
-print('-----------------------')
+print(f'{24 * "-"}')
 
+start = perf_counter()
 gen_2 = (i for i in zip_longest(tutors,klasses))
-print(type(gen_2))
+print(f'''
+Время создания GEN_2: {perf_counter() -start}
+Тип объекта GEN_2: {type(gen_2)}.
+Генератор GEN_2 занимет в памяти: {sys.getsizeof(gen_2)}
+''')
 
 for i in range(0,len(tutors)):
     print(next(gen_2))
