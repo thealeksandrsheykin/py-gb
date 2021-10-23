@@ -9,21 +9,21 @@ num_translate("eight")
 "восемь"
 """
 
+numbers = {'one': 'один',
+           'two': 'два',
+           'three': 'три',
+           'four': 'четыре',
+           'five': 'пять',
+           'six': 'шесть',
+           'seven': 'семь',
+           'eight': 'восемь',
+           'nine': 'девять',
+           'ten': 'десять'}
+
 
 def num_translate(data):
-    numbers = {'one': 'один',
-               'two': 'два',
-               'three': 'три',
-               'four': 'четыре',
-               'five': 'пять',
-               'six': 'шесть',
-               'seven': 'семь',
-               'eight': 'восемь',
-               'nine': 'девять',
-               'ten': 'десять'}
-
-    return numbers[data]
+    return numbers.get(data)
 
 
 number = input('Введите число на английском от 1-10: ')
-print(f'"{num_translate(number)}"')
+print(f'{num_translate(number)}')
