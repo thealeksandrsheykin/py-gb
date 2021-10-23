@@ -12,11 +12,12 @@ thesaurus_adv("Иван Сергеев", "Инна Серова", "Петр Ал
 }
 
 """
+from time import perf_counter
 
 
-def thesaurus_adv(*args):
+def thesaurus_adv_1(*args):
     my_dict = dict()
-    for i in list(args[0].split(',')):
+    for i in list(args):
         full_name = i.strip().title()
         name, family = full_name.split()
         if not my_dict.get(family[0], False):
@@ -28,12 +29,32 @@ def thesaurus_adv(*args):
     return my_dict
 
 
-data = input('Введите «Имя Фамилия» через запятую: ')
+def thesaurus_adv_2(*args):
+    my_dict = dict()
+    for i in args:
+        name, surname = i.split()
+        my_dict.setdefault(surname[0], {})
+        my_dict[surname[0]].setdefault(name[0], [])
+        my_dict[surname[0]][name[0]].append(i)
+    return my_dict
 
-print(f'''
-Словарь:
-{thesaurus_adv(data)}
 
-Словарь отсортированный по первой букве фамилии:
-{dict(sorted(thesaurus_adv(data).items(), key=lambda item: item[0]))}
-''')
+#
+#     # sort example
+#     sorted_dict = {x: out_dict[x] for x in sorted(out_dict)}  # Dict Comprehensions
+start_1 = perf_counter()
+my_dict_1 = thesaurus_adv_1("Иван Сергеев","Инна Серова","Петр Алексеев","Илья Иванов","Анна Савельева")
+print(f'Время выполнения Func-1: {perf_counter() - start_1}')
+start_2 = perf_counter()
+my_dict_2 = thesaurus_adv_2("Иван Сергеев","Инна Серова","Петр Алексеев","Илья Иванов","Анна Савельева")
+print(f'Время выполнения Func-2: {perf_counter() - start_2}')
+my_dict_2_sort = {i: my_dict_2[i] for i in sorted(my_dict_2)}
+print(f'\n'
+      f'Словарь Func-1:\n'
+      f'{my_dict_1}\n'
+      f'Словарь Func-2:\n'
+      f'{my_dict_2}\n'
+      f'Сортировка Func-1:\n'
+      f'{dict(sorted(my_dict_1.items(), key=lambda item: item[0]))}\n'
+      f'Сортировка Func-2:\n'
+      f'{my_dict_2_sort} \n')
