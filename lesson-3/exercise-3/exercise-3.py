@@ -14,19 +14,29 @@ thesaurus("Иван", "Мария", "Петр", "Илья")
 """
 
 
-def thesaurus(*args):
+def thesaurus_1(*args):
     my_dict = dict()
-    for i in list(args[0].split(',')):
-        name = i.strip().lower()
-        if not my_dict.get(name[0], False):
-            my_dict[name[0]] = [name]
+    for i in args:
+        if not my_dict.get(i[0], False):
+            my_dict[i[0]] = [i]
         else:
-            my_dict[name[0]].append(name)
+            my_dict[i[0]].append(i)
     return my_dict
 
 
-data = input("Введите имена сотрудников через запятую: ")
-print(f'{thesaurus(data)}')
+def thesaurus_2(*args):
+    my_dict = dict()
+    for i in args:
+        my_dict.setdefault(i[0], [])
+        my_dict[i[0]].append(i)
+    return my_dict
+
+
+print(f'Func-1: {thesaurus_1("Иван", "Мария", "Петр", "Александр", "Илья", "Федор")}')
+print(f'{24 * "-"}')
+print(f'Func-2: {thesaurus_2("Иван", "Мария", "Петр", "Александр", "Илья", "Федор")}')
+print(f'{24 * "-"}')
 
 # Отсортировать словарь по ключу
-print(f'{dict(sorted(thesaurus(data).items(), key=lambda item: item[0]))}')
+print(f'Sorted: {dict(sorted(thesaurus_1("Иван", "Мария", "Петр","Александр", "Илья", "Федор").items(), key=lambda item: item[0]))}')
+
