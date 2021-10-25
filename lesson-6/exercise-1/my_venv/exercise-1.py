@@ -27,7 +27,7 @@ URL = 'https://github.com/elastic/examples/raw/master/Common%20Data%20Formats/ng
 responce = requests.get(URL).text
 my_list_1 = [itemgetter(0,5,6)(i.split()) for i in responce.split('\n') if i != '']
 
-with open(r'nginx_logs.txt', 'r') as file:
+with open(r'nginx_logs.txt', 'r', encoding='utf-8') as file:
     my_list_2 = [itemgetter(0,5,6)(i.split()) for i in (file.read()).split('\n')]
 
 for i,j in enumerate(my_list_1):
