@@ -20,7 +20,19 @@
 
 """
 import requests
+from operator import itemgetter
 
 URL = 'https://github.com/elastic/examples/raw/master/Common%20Data%20Formats/nginx_logs/nginx_logs'
 
 responce = requests.get(URL).text
+my_list_1 = [itemgetter(0,5,6)(i.split()) for i in responce.split('\n') if i != '']
+
+with open(r'nginx_logs.txt', 'r') as file:
+    my_list_2 = [itemgetter(0,5,6)(i.split()) for i in (file.read()).split('\n')]
+
+for i,j in enumerate(my_list_1):
+    print(f'MY_LIST_1: {my_list_1[i]}\n'
+          f'MY_LIST_2: {my_list_2[i]}')
+
+
+
