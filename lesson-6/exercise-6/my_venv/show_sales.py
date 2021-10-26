@@ -12,14 +12,19 @@ def show_sales(start,stop):
             print(f'{row.strip()}')
 
 if len(sys.argv[1:]) == 0:
-    start,stop = None,None
+    start, stop = None, None
 elif len(sys.argv[1:]) == 1:
-    start,stop = int(sys.argv[1:][0]) - 1,None
+    start,stop = list(map(int, sys.argv[1:]))[0],None
+    start -= 1
 elif len(sys.argv[1:]) == 2:
-    start,stop = [int(i) for i in sys.argv[1:]]
+    start,stop = list(map(int, sys.argv[1:]))
     start -= 1
 else:
     sys.exit(1)
+
+
+
+
 
 show_sales(start,stop)
 
