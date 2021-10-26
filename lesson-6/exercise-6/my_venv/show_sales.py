@@ -22,9 +22,5 @@ elif len(sys.argv[1:]) == 2:
 else:
     sys.exit(1)
 
-
-
-
-
 show_sales(start,stop)
 
