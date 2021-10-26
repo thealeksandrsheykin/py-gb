@@ -22,18 +22,18 @@
 import sys
 import json
 
-with open(r'users.csv', 'r', encoding='utf-8') as u, open(r'hobby.csv', 'r', encoding='utf-8') as h:
-    users = u.readlines()
-    hobby = h.readlines()
+with open(r'users.csv', 'r', encoding='utf-8') as users, open(r'hobby.csv', 'r', encoding='utf-8') as hobby:
+    users_list = users.readlines()
+    hobby_list = hobby.readlines()
 
 my_dict = dict()
-if len(users) < len(hobby):
+if len(users_list) < len(hobby_list):
     sys.exit(1)
 else:
-    for i in range(0,len(users)):
-        key = ' '.join(users[i].strip('\n').split(','))
+    for i in range(0,len(users_list)):
+        key = ' '.join(users_list[i].strip('\n').split(','))
         try:
-            value = hobby[i].strip('\n')
+            value = hobby_list[i].strip('\n')
         except IndexError:
             value = None
         my_dict[key] = value
@@ -47,7 +47,7 @@ with open ('users_hobby.json', 'r', encoding='utf-8') as file:
     json_file = json.load(file)
 
 for key,value in json_file.items():
-    print(f'{key} -> {value}')
+    print(f'{key} : {value}')
 
 
 
