@@ -14,14 +14,9 @@ URL = 'https://github.com/elastic/examples/raw/master/Common%20Data%20Formats/ng
 responce = requests.get(URL).text
 my_list_1 = [i.split()[0] for i in responce.split('\n') if i != '']
 
-count = 0
-spammer = ''
-for i in set(my_list_1):
-    if my_list_1.count(i) > count:
-        count = my_list_1.count(i)
-        spammer = i
-    else:
-        continue
+my_dict = {i: my_list_1.count(i) for i in set(my_list_1)}
+my_dict = dict(sorted(my_dict.items(), key=lambda item: item[1], reverse=True))
 
-print(f'IP адрес спамера: {spammer} количество отправленных им запросов: {count}')
+for i,j in enumerate(list(my_dict.keys())[:5],1):
+    print(f'IP адрес спамера #{i}: {j:15} количество отправленных им запросов: {my_dict[j]}')
 
