@@ -15,6 +15,7 @@ def edit_sales(row,value):
                 file_position += len(j)
         print(file_position)
         file.seek(file_position)
+        file.write(value)
         file.write('\n')
 
 
