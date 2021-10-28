@@ -35,7 +35,13 @@ for i in subfolders:
 # Забираем структуру данных из файла JSON
 with open('structura.json', 'r') as file:
     my_dict = json.load(file)
-    for key,value in my_dict.items():
-        if not os.path.exists(value['path']):
-            os.makedirs(value['path'])
+    for i in my_dict.keys():
+        if my_dict[i].get('sub',False):
+            for j in my_dict[i]['sub'].keys():
+                dir_path = os.path.join(i,j)
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+        else:
+            if not os.path.exists(i):
+                os.mkdir(i)
 
