@@ -55,7 +55,7 @@ with open(r'config.yaml', 'r', encoding='utf-8') as file:
 for i in GetPaths(my_dict,list(),os.getcwd()):
     if not os.path.exists(os.path.dirname(i)):
         os.makedirs(os.path.dirname(i))
-    if os.path.isfile(i):
+    if not os.path.isdir(i):
         with open(i, "w") as file:
             pass
 

@@ -23,10 +23,9 @@
 
 import os
 
+#root = os.getcwd()
+path = 'my_project'
 
-root = os.getcwd()
-
-for i in os.scandir(r'my_project'):
-    print(i)
-
+for root, dirs, files in os.walk(path):
+    print(files)
 
