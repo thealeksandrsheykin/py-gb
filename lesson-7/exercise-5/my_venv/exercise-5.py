@@ -16,6 +16,7 @@
 """
 
 import os
+import json
 
 
 path = r'..\\'
@@ -38,6 +39,9 @@ for root, dirs,files in os.walk(path):
                 ext[my_list.index(value)].append(extension)
 
 my_dict = dict(zip(my_list,zip(cnt,ext)))
+
+with open('{}.json'.format(os.path.abspath(path).split('\\')[-1]), 'w+',encoding='utf-8') as file:
+    json.dump(my_dict,file,ensure_ascii=False)
 
 for i,j in my_dict.items():
     print(f'{i:<10} : {j}')
