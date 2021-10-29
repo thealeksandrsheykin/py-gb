@@ -18,43 +18,33 @@
 import os
 import json
 
-
 path = r'..\\'
 
-my_list = [100,1000,10000,100000]
+my_list = [100, 1000, 10000, 100000]
 cnt = [0] * 4
-ext = [[]] * 4
+ext = [''] * 4
 
-for root, dirs,files in os.walk(path):
-        for file in files:
-            filepath = os.path.join(root, file)
-            size = os.stat(filepath).st_size
-            extension = os.path.splitext(filepath)[-1].lstrip('.')
-            try:
-                value = min(filter(lambda i: size < i, my_list))
-            except ValueError:
-                pass
-            cnt[my_list.index(value)] += 1
-            if not extension in ext[my_list.index(value)]:
-                ext[my_list.index(value)].append(extension)
+for root, dirs, files in os.walk(path):
+    for file in files:
+        filepath = os.path.join(root, file)
+        size = os.stat(filepath).st_size
+        extension = os.path.splitext(filepath)[-1].lstrip('.')
+        try:
+            value = min(filter(lambda i: size < i, my_list))
+        except ValueError:
+            pass
+        index = int(my_list.index(value))
+        cnt[index] += 1
+        if extension not in ext[index]:
+            ext[index] = ext[index] + f'{extension} '
 
-my_dict = dict(zip(my_list,zip(cnt,ext)))
+my_dict = dict()
+for i in range(len(my_list)):
+    my_dict[my_list[i]] = (cnt[i], ext[i].strip().split())
 
-with open('{}.json'.format(os.path.abspath(path).split('\\')[-1]), 'w+',encoding='utf-8') as file:
-    json.dump(my_dict,file,ensure_ascii=False)
 
-for i,j in my_dict.items():
+with open('{}.json'.format(os.path.abspath(path).split('\\')[-1]), 'w+', encoding='utf-8') as file:
+    json.dump(my_dict, file, ensure_ascii=False)
+
+for i, j in my_dict.items():
     print(f'{i:<10} : {j}')
-
-
-
-
-
-
-
-
-
-
-
-
-
