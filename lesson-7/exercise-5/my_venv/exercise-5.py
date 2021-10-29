@@ -14,3 +14,35 @@
 Сохраните результаты в файл <folder_name>_summary.json в той же папке, где запустили скрипт.
 
 """
+
+import os
+
+
+path = r'..\\'
+my_list = [100,1000,10000,100000]
+my_dict = dict.fromkeys(my_list,None)
+tmp_dict = dict.fromkeys(my_list,0)
+
+for root, dirs,files in os.walk(path):
+        for file in files:
+            filepath = os.path.join(root, file)
+            ext = os.path.splitext(filepath)[-1].lstrip('.')
+            size = os.stat(filepath).st_size
+            try:
+                key = min(filter(lambda i: size < i, my_list))
+            except ValueError:
+                pass
+            tmp_dict[key] += 1
+
+print(tmp_dict)
+
+
+
+
+
+
+
+
+
+
+

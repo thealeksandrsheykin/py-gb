@@ -28,7 +28,6 @@ for root, dirs,files in os.walk(path):
     if files:
         for file in files:
             size = os.stat(os.path.join(root,file)).st_size
-            print(size)
             if size <= 100:
                 my_dict[100] += 1
             elif 100 < size <= 1000:
