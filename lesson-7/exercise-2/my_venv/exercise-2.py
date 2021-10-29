@@ -34,7 +34,7 @@ import yaml
 
 
 def GetPaths(data,paths,root):
-        folder,structures = list(data.items())[0]
+    for folder,structures in data.items():
         dirpath = os.path.join(root,folder)
         if structures:
             for files in structures:
@@ -45,7 +45,7 @@ def GetPaths(data,paths,root):
                     paths.append(filepath)
         else:
             paths.append(f'{dirpath}\\')
-        return paths
+    return paths
 
 
 my_dict = dict()
@@ -55,5 +55,7 @@ with open(r'config.yaml', 'r', encoding='utf-8') as file:
 for i in GetPaths(my_dict,list(),os.getcwd()):
     if not os.path.exists(os.path.dirname(i)):
         os.makedirs(os.path.dirname(i))
+    if os.path.isfile(i):
         with open(i, "w") as file:
             pass
+

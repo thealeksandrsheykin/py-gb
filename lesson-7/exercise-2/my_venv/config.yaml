@@ -20,3 +20,6 @@ my_project:
           - authapp:
             - base.html
             - index.html
+        - templates_1:
+
+my_project_1:
