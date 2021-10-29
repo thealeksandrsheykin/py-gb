@@ -53,7 +53,6 @@ with open(r'config.yaml', 'r', encoding='utf-8') as file:
     my_dict = yaml.load(file, Loader=yaml.FullLoader)
 
 for i in GetPaths(my_dict,list(),os.getcwd()):
-    print(i)
     if not os.path.exists(os.path.dirname(i)):
         os.makedirs(os.path.dirname(i))
         with open(i, "w") as file:
