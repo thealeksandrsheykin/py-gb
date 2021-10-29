@@ -39,4 +39,5 @@ for root, dirs,files in os.walk(path):
     else:
         continue
 
-print(my_dict)
+for i,j in my_dict.items():
+    print(f'{i:10}:{j:5}')
