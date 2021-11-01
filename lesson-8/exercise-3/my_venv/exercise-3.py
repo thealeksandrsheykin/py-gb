@@ -23,3 +23,21 @@ a = calc_cube(5)
 calc_cube(5: <class 'int'>)
 
 """
+
+def type_logger(func):
+    def logger(*args,**kwargs):
+        print(args)
+        print(kwargs)
+        for i in args:
+            print(f'{func.__name__}({i} : {type(i)})')
+            return func(i)
+    return logger
+
+
+@type_logger
+def calc_cube(x,y):
+   return x ** y
+
+if __name__ == '__main__':
+    print(f'Результат: {calc_cube(number=3)}')
+
