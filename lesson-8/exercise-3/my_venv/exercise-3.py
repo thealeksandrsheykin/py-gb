@@ -25,19 +25,24 @@ calc_cube(5: <class 'int'>)
 """
 
 def type_logger(func):
-    def logger(*args,**kwargs):
-        print(args)
-        print(kwargs)
-        for i in args:
-            print(f'{func.__name__}({i} : {type(i)})')
-            return func(i)
-    return logger
+    print(f'Оборачиваемая функция: {func}\n'
+          f'Тип: {type(func)}\n')
+    def wrapper(*args,**kwargs):
+        if kwargs:
+            data = [j for i,j in kwargs.items()]
+        else:
+            data = list(args)
+        for i in data:
+            print(f'{func.__name__} ({i}: {type(i)}) Результат работы функции: {func(i)}')
+    return wrapper
 
 
 @type_logger
-def calc_cube(x,y):
-   return x ** y
+def calc_cube(x):
+   return  x**3
 
 if __name__ == '__main__':
-    print(f'Результат: {calc_cube(number=3)}')
+   calc_cube(2,3,4,5)
+   print()
+   calc_cube(number_1=6,number_2=7,number_3=8,number_4=9)
 
