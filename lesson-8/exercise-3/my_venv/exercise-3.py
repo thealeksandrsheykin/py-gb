@@ -24,9 +24,12 @@ calc_cube(5: <class 'int'>)
 
 """
 
+from functools import wraps
+
 def type_logger(func):
     print(f'Оборачиваемая функция: {func}\n'
           f'Тип: {type(func)}\n')
+    @wraps(func)
     def wrapper(*args,**kwargs):
         if kwargs:
             data = [j for i,j in kwargs.items()]
@@ -37,12 +40,19 @@ def type_logger(func):
     return wrapper
 
 
+
 @type_logger
 def calc_cube(x):
    return  x**3
 
 if __name__ == '__main__':
-   calc_cube(2,3,4,5)
-   print()
-   calc_cube(number_1=6,number_2=7,number_3=8,number_4=9)
+    print(f'Маскировка декоратора: {calc_cube.__name__}\n')
+    calc_cube(2)
+    print()
+    calc_cube(3,4,5,6)
+    print()
+    calc_cube(number_1=7)
+    print()
+    calc_cube(number_1=8,number_2=9,number_3=10,number_4=11)
+
 
