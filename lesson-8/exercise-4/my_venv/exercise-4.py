@@ -29,7 +29,7 @@ def val_checker(check):
                 return func(*args)
             else:
                raise ValueError('Wrong val: {0}'.format(*args))
-        wrapper.__name__ = func.__name__
+        wrapper.__name__ = func.__name__ # Маскировка декоратора
         return wrapper
     return actual_decorator
 
@@ -39,5 +39,5 @@ def calc_cube(x):
    return x ** 3
 
 if __name__=='__main__':
-    print(calc_cube.__name__)
-    print(f'Результат: {calc_cube(-6)}')
+    print(f'Маскировка декоратора: {calc_cube.__name__}')
+    print(f'Результат: {calc_cube(4)}')
