@@ -36,7 +36,7 @@ if __name__ == '__main__':
     print(my_class_1.draw())
     my_class_2 = Pen('ручкой')
     print(my_class_2.draw())
-    my_class_3 = Pen('ручкой')
+    my_class_3 = Pen('карандашем')
     print(my_class_3.draw())
     my_class_4 = Handle('маркером')
     print(my_class_4.draw())
