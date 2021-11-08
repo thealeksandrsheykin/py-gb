@@ -13,3 +13,34 @@
 Выполнить общий подсчёт расхода ткани. Проверить на практике полученные на этом уроке знания.
 Реализовать абстрактные классы для основных классов проекта и проверить работу декоратора @property.
 """
+from abc import ABC,abstractmethod
+
+class Clothes(ABC):
+    def __init__(self,data):
+        self.data = data  # размер (для пальто) и рост (для костюма)
+
+    @abstractmethod
+    def calc(self):
+        pass
+
+class Coat(Clothes):
+    @property
+    def calc(self):
+        return round((self.data / 6.5) + 0.5, 2)   # (V/6.5 + 0.5)
+
+class Suit(Clothes):
+    @property
+    def calc(self):
+        return round((2 * self.data) + 0.3, 2)     # 2*H + 0.3
+
+
+
+
+if __name__ == '__main__':
+    my_class_1 = Coat(40)
+    my_class_2 = Suit(1.72)
+    print(f'Для пальто нужно: {my_class_1.calc} метров ткани')
+    print(f'Для костюма нужно: {my_class_2.calc} метров ткани')
+
+
+
