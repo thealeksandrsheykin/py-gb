@@ -21,8 +21,6 @@
 первым элементом первой строки второй матрицы и пр.
 """
 
-import sys
-
 class Matrix:
     def __init__(self,matrix):
         self.matrix = matrix
@@ -44,15 +42,15 @@ class Matrix:
         if self.size == other.size:
            for row in range(len(self.matrix)):
                result.append([i + j for i, j in zip(self.matrix[row], other.matrix[row])])
-        return result
+        else:
+            raise ValueError('Error...')
+        return Matrix(result)
 
 
 if __name__ == '__main__':
-    my_class_1 = Matrix([[31,22],[37,43],[51,86]])
-    my_class_2 = Matrix([[25,1200],[40,15],[100,9]])
-    print(my_class_1)
-    print(my_class_1.size)
-    print(my_class_2)
-    print(my_class_2.size)
-    print(my_class_1+my_class_2)
+    my_class_1 = Matrix([[3,5,32],[2,4,6],[-1,64,-8]])
+    my_class_2 = Matrix([[25,1,-9],[4,5,0],[100,9,-24]])
+    print(f'Матрица 1:\n{my_class_1}\nРазмер матрицы: {my_class_1.size}\n')
+    print(f'Матрица 2:\n{my_class_2}\nРазмер матрицы: {my_class_2.size}\n')
+    print(f'Результат сложения матриц:\n{my_class_1+my_class_2}')
 
