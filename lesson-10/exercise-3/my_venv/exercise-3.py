@@ -28,3 +28,49 @@
 
 Подсказка: подробный список операторов для перегрузки доступен по ссылке.
 """
+
+class Cell:
+    def __init__(self,param):
+        self.param = param
+
+    def __add__(self,other):
+        return Cell(self.param + other.param)
+
+    def __sub__(self, other):
+        if (self.param - other.param) > 0:
+            return Cell(self.param - other.param)
+        else:
+            raise ValueError('Error...')
+
+    def __mul__(self,other):
+        return Cell(self.param * other.param)
+
+    def __floordiv__(self, other):
+        return Cell(self.param // other.param)
+
+    def make_order(self,cells):
+        result = ''
+        for i in range(self.param // cells):
+                result += f'{"*" * cells}\n'
+        result += f'{"*" * (self.param % cells)}'
+        return result
+
+    def __str__(self):
+        if self.param % 10 == 1:
+            return f'Клетка состоит из {self.param} ячеек.'
+        else:
+            return f'Клетка состоит из {self.param} ячейки.'
+
+if __name__ == '__main__':
+    my_class_1 = Cell(11)
+    my_class_2 = Cell(25)
+
+    print(f'Сложение:  {my_class_1 + my_class_2}')
+    print(f'Вычитание: {my_class_2 - my_class_1}')
+    print(f'Умножение: {my_class_1 * my_class_2}')
+    print(f'Деление:   {my_class_2 // my_class_1}')
+    print(f'\nКласс 1:\n{my_class_1.make_order(2)}')
+    print(f'\nКласс 2:\n{my_class_2.make_order(9)}')
+
+
+
