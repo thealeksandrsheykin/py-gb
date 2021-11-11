@@ -13,16 +13,23 @@
 from datetime import datetime
 
 class Date:
+
     def __init__(self,date):
-        self.date = date
+        self.__date = date
+
+    @property
+    def date(self):
+        return self.__date
 
     @classmethod
-    def get_data(cls,object):
-        data = [int(i) for i in object.date.split('-')]
-        if Date.check_data(data[::-1]):
-            return data
-        else:
-            raise ValueError('Неправильная дата')
+    def get_data(cls):
+
+        data = [int(i) for i in cls.date.split('-')]
+        print(data)
+    #    if Date.check_data(data[::-1]):
+    #        return data
+    #    else:
+    #        raise ValueError('Ваша дата не верна...')
 
     @staticmethod
     def check_data(data):
@@ -34,5 +41,6 @@ class Date:
 
 
 if __name__ == '__main__':
-    my_class = Date('28-02-2021')
-    print(Date.get_data(my_class))
+    my_class = Date('20-11-2021')
+    print(f'Первый способ: {my_class.get_data()}')
+    #print(f'Второй способ: {Date.get_data("02-05-1990")}')
