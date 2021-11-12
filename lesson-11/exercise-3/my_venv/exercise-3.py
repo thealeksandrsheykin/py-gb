@@ -26,7 +26,10 @@ class My_Exception(Exception):
 
 
 class CreateList:
-    my_list = list()
+    MY_LIST = list()
+
+    def __init__(self):
+        self._my_list = CreateList.MY_LIST
 
     def __call__(self):
         print(f'Если вы захотите остановить работу скрипта, то введите команду «stop»')
@@ -34,7 +37,7 @@ class CreateList:
             element = input('Введите элемент списка: ')
             try:
                 if element.isnumeric():
-                    self.my_list.append(int(element))
+                    self._my_list.append(int(element))
                 elif element == 'stop':
                     break
                 else:
@@ -42,10 +45,7 @@ class CreateList:
                                        f'Попробуйте еще раз ввести элемент списка (должен быть числом).')
             except My_Exception as error:
                 print(f'{error}')
-        return CreateList()
-
-    def __str__(self):
-        return f'Результирующий список: {self.my_list}'
+        return self._my_list
 
 
 if __name__ == '__main__':
