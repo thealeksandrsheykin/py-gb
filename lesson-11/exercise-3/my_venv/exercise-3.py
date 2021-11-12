@@ -16,5 +16,38 @@
 При этом работа скрипта не должна завершаться.
 """
 
+
+class My_Exception(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
+
+class CreateList:
+    my_list = list()
+
+    def __call__(self):
+        print(f'Если вы захотите остановить работу скрипта, то введите команду «stop»')
+        while True:
+            element = input('Введите элемент списка: ')
+            try:
+                if element.isnumeric():
+                    self.my_list.append(int(element))
+                elif element == 'stop':
+                    break
+                else:
+                    raise My_Exception(f'Кажется элемент "{element}" не принадлежит к типу "ЧИСЛО".\n'
+                                       f'Попробуйте еще раз ввести элемент списка (должен быть числом).')
+            except My_Exception as error:
+                print(f'{error}')
+        return CreateList()
+
+    def __str__(self):
+        return f'Результирующий список: {self.my_list}'
+
+
 if __name__ == '__main__':
-    pass
+    my_class = CreateList()
+    print(my_class())
