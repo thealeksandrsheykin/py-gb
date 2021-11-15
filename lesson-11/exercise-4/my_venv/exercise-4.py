@@ -37,7 +37,7 @@ class Store:
         for equipment in self.__store:
             result += f'{equipment}:'
             for i, j in self.__store[equipment].items():
-                result += "\n\t{}:\n\t\t{}".format(i, '\n\t\t'.join(j))
+                result += "\n\t{}:\n\t\t{}\n".format(i, '\n\t\t'.join(j))
         result += f'\n{24 * "-"}'
         return result
 
@@ -61,17 +61,48 @@ class Printer(Equipments):
     def __str__(self):
         return f'Модель: {self.model} Серия: {self.series}'
 
+
+class Scanner(Equipments):
+    def __init__(self,model,series):
+        super().__init__(model,series)
+
+    def action(self):
+        return f'Сканер {self.model} {self.series} сканирует.'
+
+    def __str__(self):
+        return f'Модель: {self.model} Серия: {self.series}'
+
+
+class Xerox(Equipments):
+    def __init__(self,model,series):
+        super().__init__(model,series)
+
+    def action(self):
+        return f'Ксерокс {self.model} {self.series} делает копию.'
+
+    def __str__(self):
+        return f'Модель: {self.model} Серия: {self.series}'
+
+
 if __name__ == '__main__':
     store = Store()
     equipment_1 = Printer('HP', 'Laser 107WR 209U7A')
     equipment_2 = Printer('HP', 'Neverstop Laser 1000w')
-    equipment_3 = Printer('Xerox', 'Phaser 3020Bl')
-    equipment_4 = Printer('EPSON', 'L810')
-    equipment_5 = Printer('HP', 'TEST')
+    equipment_3 = Scanner('Epson', 'WorkForce DS-530')
+    equipment_4 = Scanner('Canon', 'ImageFormula DR-C130')
+    equipment_5 = Xerox('Brother', 'DCP-1602R')
+    equipment_6 = Xerox('Kyocera', 'Ecosys M2735dn')
+
     store.add_to_store(equipment_1)
     store.add_to_store(equipment_2)
     store.add_to_store(equipment_3)
     store.add_to_store(equipment_4)
-    print(store.get_from_store(equipment_5))
+    store.add_to_store(equipment_5)
+    store.add_to_store(equipment_6)
+
     print(store)
+    store.get_from_store(equipment_5)
+    store.get_from_store(equipment_6)
+    print(store)
+
 
