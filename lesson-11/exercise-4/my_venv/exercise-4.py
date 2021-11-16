@@ -7,114 +7,59 @@
 классе определить параметры, общие для приведённых типов. В классах-наследниках реализовать параметры, уникальные для
 каждого типа оргтехники.
 """
-import re
 
+from abc import abstractmethod
 
 class Store:
+
     def __init__(self):
         self.__store = {}
 
-    def add_to_store(self,equipment):
-        # Добавляем на склад оборудование
-        self.__store.setdefault(equipment.type_equipment, {})
-        self.__store[equipment.type_equipment].setdefault(equipment.model, []).append(equipment.series)
-        return f'На склад добавлено устройство:\n\t-{equipment}'
+    def add_to_store(self):
+        pass
 
-    def del_from_store(self,equipment):
-        # Извлекаем со склада оборудование
-        model,series = (re.match(r'\S+:\s+(.*)\s+\S+:\s+(.*)', str(equipment))).groups()
-        try:
-            self.__store[equipment.type_equipment][model].remove(series)
-        except (KeyError,ValueError):
-            return f'На складе устройство ({equipment}) отсутствует.'
-        else:
-            if not self.__store[equipment.type_equipment][model]:
-                del self.__store[equipment.type_equipment][model]
-            if not self.__store[equipment.type_equipment]:
-                del self.__store[equipment.type_equipment]
-        return f'Со склада забрали устройство:\n\t-{equipment}'
-
-    def __str__(self):
-        result = f'{24 * "-"}\n'
-        for equipment in self.__store:
-            result += f'{equipment}:'
-            for i, j in self.__store[equipment].items():
-                result += "\n\t{}:\n\t\t{}\n".format(i, '\n\t\t'.join(j))
-        result += f'\n{24 * "-"}'
-        return result
-
+    def del_to_store(self):
+        pass
 
 class Equipments:
+
     def __init__(self,model,series):
         self.model = model
         self.series = series
 
-    @property
-    def type_equipment(self):
-        return self.__class__.__name__
-
-    def __repr__(self):
-        f'Модель: {self.model} Серия: {self.series}'
+    @abstractmethod
+    def action(self):
+        pass
 
 class Printer(Equipments):
+
     def __init__(self,model,series):
         super().__init__(model,series)
 
     def action(self):
-        return f'Принтер {self.model} {self.series} печатает.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
-
+        return f'Принтер {self.model} ({self.series}) печатает.'
 
 class Scanner(Equipments):
+
     def __init__(self,model,series):
         super().__init__(model,series)
 
     def action(self):
-        return f'Сканер {self.model} {self.series} сканирует.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
-
+        return f'Сканер {self.model} ({self.series}) сканирует.'
 
 class Xerox(Equipments):
+
     def __init__(self,model,series):
         super().__init__(model,series)
 
     def action(self):
-        return f'Ксерокс {self.model} {self.series} делает копию.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
+        return f'Ксерокс {self.model} ({self.series}) копирует.'
 
 
 if __name__ == '__main__':
-    store = Store()
-    equipment_1 = Printer('HP', 'Laser 107WR 209U7A')
-    equipment_2 = Printer('HP', 'Neverstop Laser 1000w')
-    equipment_3 = Scanner('Epson', 'WorkForce DS-530')
-    equipment_4 = Scanner('Canon', 'ImageFormula DR-C130')
-    equipment_5 = Xerox('Brother', 'DCP-1602R')
-    equipment_6 = Xerox('Kyocera', 'Ecosys M2735dn')
-    print(equipment_1.action())
-    print(equipment_3.action())
-    print(equipment_5.action())
-
-    print(store.add_to_store(equipment_1))
-    store.add_to_store(equipment_2)
-    print(store.add_to_store(equipment_3))
-    store.add_to_store(equipment_4)
-    print(store.add_to_store(equipment_5))
-    store.add_to_store(equipment_6)
-
-    print(store)
-
-    print(store.del_from_store(equipment_1))
-    store.del_from_store(equipment_3)
-    store.del_from_store(equipment_5)
-    store.del_from_store(equipment_6)
-
-    print(store)
-
-
+    printer = Printer('HP','LaserJet P1006')
+    scanner = Scanner('Epson','WorkForce DS-1630')
+    xerox = Xerox('Canon','PIXMA MG2540S')
+    print(f'{printer.action()}\n'
+          f'{scanner.action()}\n'
+          f'{xerox.action()}')
