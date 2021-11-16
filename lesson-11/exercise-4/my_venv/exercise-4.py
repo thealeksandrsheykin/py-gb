@@ -97,17 +97,23 @@ if __name__ == '__main__':
     equipment_4 = Scanner('Canon', 'ImageFormula DR-C130')
     equipment_5 = Xerox('Brother', 'DCP-1602R')
     equipment_6 = Xerox('Kyocera', 'Ecosys M2735dn')
-    equipment_7 = Xerox('Kyocera', 'test')
+    print(equipment_1.action())
+    print(equipment_3.action())
+    print(equipment_5.action())
 
-    store.add_to_store(equipment_1)
+    print(store.add_to_store(equipment_1))
     store.add_to_store(equipment_2)
-    store.add_to_store(equipment_3)
+    print(store.add_to_store(equipment_3))
     store.add_to_store(equipment_4)
-    store.add_to_store(equipment_5)
+    print(store.add_to_store(equipment_5))
     store.add_to_store(equipment_6)
 
-    print(store.del_from_store(equipment_5))
-    print(store.del_from_store(equipment_6))
+    print(store)
+
+    print(store.del_from_store(equipment_1))
+    store.del_from_store(equipment_3)
+    store.del_from_store(equipment_5)
+    store.del_from_store(equipment_6)
 
     print(store)
 
