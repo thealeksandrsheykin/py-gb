@@ -27,6 +27,6 @@ class Complex:
 if __name__ == '__main__':
     x = Complex(1+2j)
     y = Complex(3+7j)
-    print(f'Сложение: {x + y}')
+    print(f'Сложение:  {x + y}')
     print(f'Умножение: {x * y}')
 
