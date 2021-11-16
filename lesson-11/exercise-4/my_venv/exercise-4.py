@@ -7,6 +7,8 @@
 классе определить параметры, общие для приведённых типов. В классах-наследниках реализовать параметры, уникальные для
 каждого типа оргтехники.
 """
+import re
+
 
 class Store:
     def __init__(self):
@@ -16,21 +18,21 @@ class Store:
         # Добавляем на склад оборудование
         self.__store.setdefault(equipment.type_equipment, {})
         self.__store[equipment.type_equipment].setdefault(equipment.model, []).append(equipment.series)
-        return f'На склад добавлено устройство:\n\t-Модель: {equipment.model}\n\t-Cерия:  {equipment.series}\n'
+        return f'На склад добавлено устройство:\n\t-{equipment}'
 
-    def get_from_store(self,equipment):
+    def del_from_store(self,equipment):
         # Извлекаем со склада оборудование
-        series_list = self.__store[equipment.type_equipment].setdefault(equipment.model)
+        model,series = (re.match(r'\S+:\s+(.*)\s+\S+:\s+(.*)', str(equipment))).groups()
         try:
-            series_list.pop(series_list.index(equipment.series))
-        except (AttributeError,ValueError):
-            return f'На складе не найдено оборудования такой модели и серии...'
+            self.__store[equipment.type_equipment][model].remove(series)
+        except (KeyError,ValueError):
+            return f'На складе устройство ({equipment}) отсутствует.'
         else:
-            if series_list == []: # Удаляем модель, если на складе больше ее нет
-               del self.__store[equipment.type_equipment][equipment.model]
-            if self.__store[equipment.type_equipment] == {}: # Если склад пустой,удаляем все категории оборудования
+            if not self.__store[equipment.type_equipment][model]:
+                del self.__store[equipment.type_equipment][model]
+            if not self.__store[equipment.type_equipment]:
                 del self.__store[equipment.type_equipment]
-        return f'Со склада забрали устройство:\n\t-Модель: {equipment.model}\n\t-Cерия:  {equipment.series}\n'
+        return f'Со склада забрали устройство:\n\t-{equipment}'
 
     def __str__(self):
         result = f'{24 * "-"}\n'
@@ -50,6 +52,9 @@ class Equipments:
     @property
     def type_equipment(self):
         return self.__class__.__name__
+
+    def __repr__(self):
+        f'Модель: {self.model} Серия: {self.series}'
 
 class Printer(Equipments):
     def __init__(self,model,series):
@@ -92,6 +97,7 @@ if __name__ == '__main__':
     equipment_4 = Scanner('Canon', 'ImageFormula DR-C130')
     equipment_5 = Xerox('Brother', 'DCP-1602R')
     equipment_6 = Xerox('Kyocera', 'Ecosys M2735dn')
+    equipment_7 = Xerox('Kyocera', 'test')
 
     store.add_to_store(equipment_1)
     store.add_to_store(equipment_2)
@@ -100,9 +106,9 @@ if __name__ == '__main__':
     store.add_to_store(equipment_5)
     store.add_to_store(equipment_6)
 
-    print(store)
-    store.get_from_store(equipment_5)
-    store.get_from_store(equipment_6)
+    print(store.del_from_store(equipment_5))
+    print(store.del_from_store(equipment_6))
+
     print(store)
 
 
