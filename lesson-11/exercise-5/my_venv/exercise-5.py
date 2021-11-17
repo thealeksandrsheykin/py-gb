@@ -36,7 +36,7 @@ class Store:
                 del self.__store[equipment.type_eq][model][series]
             if not self.__store[equipment.type_eq][model]:
                 del self.__store[equipment.type_eq][model]
-            self.departments[department][equipment.type_eq].append(str(equipment))
+            #self.departments[department][equipment.type_eq].append(str(equipment))
 
         return f'Со склада забрали {equipment.type_eq}: {model} {series} {qty} шт. в {department} отдел.'
 
