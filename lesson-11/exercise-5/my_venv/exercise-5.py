@@ -17,7 +17,7 @@ class Store:
 
     def add_to_store(self,equipment):
         # Добавляем на склад оборудование
-        self.__store.setdefault(equipment.type_equipment, {})
+        self.__store.setdefault(equipment.type_equipment, {model:[]}).append(equipment)
         self.__store[equipment.type_equipment].setdefault(equipment.model, []).append(equipment.series)
         return f'На склад добавлено устройство:\n\t-{equipment}'
 
