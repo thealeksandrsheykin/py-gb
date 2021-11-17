@@ -1,0 +1,5 @@
+{
+  "IT":{"Printer":[],"Scanner":[],"Xerox":[]},
+  "Accounting": {"Printer":[],"Scanner":[],"Xerox":[]},
+  "Marketing" : {"Printer":[],"Scanner":[],"Xerox":[]}
+}
