@@ -7,89 +7,114 @@
 а также других данных, можно использовать любую подходящую структуру (например, словарь).
 """
 
-import re
+from abc import abstractmethod
 
 
 class Store:
+
     def __init__(self):
-        self.__store = {}
-        self.__department = {}
+        self.store = {'Printer':{},'Scanner':{},'Xerox':{}}
+        self.depts = {'IT' :{'Printer':{},'Scanner':{},'Xerox':{}},
+                      'MGR':{'Printer':{},'Scanner':{},'Xerox':{}}}
 
-    def add_to_store(self,equipment):
-        # Добавляем на склад оборудование
-        self.__store.setdefault(equipment.type_equipment, {model:[]}).append(equipment)
-        self.__store[equipment.type_equipment].setdefault(equipment.model, []).append(equipment.series)
-        return f'На склад добавлено устройство:\n\t-{equipment}'
 
-    def del_from_store(self,equipment,department=None):
-        # Извлекаем со склада оборудование
-        model,series = (re.match(r'\S+:\s+(.*)\s+\S+:\s+(.*)', str(equipment))).groups()
+    def add_to(self,device,qty,to=None):   # Добавление устройств в различные подразделения (по умолчанию на склад)
+        if to is None:
+            to = self.store
+        to[device.type].setdefault(device.company,{})                              # Компания устройства
+        to[device.type][device.company].setdefault(device.model,{})                # Модель устройства
+        to[device.type][device.company][device.model].setdefault(device.series, 0) # Серия устройства
+        to[device.type][device.company][device.model][device.series] += qty
+        return f'На склад добавлен {device.type}: {device.company} {device.model} {device.series} {qty} шт.'
+
+
+    def transfer_from_to(self,device,qty,dst):
         try:
-            self.__store[equipment.type_equipment][model].remove(series)
-        except (KeyError,ValueError):
-            return f'На складе устройство ({equipment}) отсутствует.'
+            amount = self.store[device.type][device.company][device.model][device.series]
+        except KeyError:
+            return f'{device.type}: {device.company} {device.model} {device.series} не обнаружен.'
         else:
-            if department:
-                self.__department.setdefault(department,{})
-                self.__department[department].setdefault(equipment.type_equipment,{})
-                self.__department[department][equipment.type_equipment].setdefault(model, []).append(series)
-            if not self.__store[equipment.type_equipment][model]:
-                del self.__store[equipment.type_equipment][model]
-            if not self.__store[equipment.type_equipment]:
-                del self.__store[equipment.type_equipment]
-        return f'Со склада забрали устройство:\n\t-{equipment}'
+            if amount < qty:
+                return f'Такого количества {device.type}: {device.company} {device.model} {device.series} нет.'
+            else:
+                self.store[device.type][device.company][device.model][device.series] -= qty
+                self.add_to(device,qty, self.depts[dst]) # Передаем со склада в подразделение
+                if (amount - qty) == 0:
+                    del self.store[device.type][device.company][device.model][device.series]
+                if not self.store[device.type][device.company][device.model]:
+                    del self.store[device.type][device.company][device.model]
+                if not self.store[device.type][device.company]:
+                    del self.store[device.type][device.company]
+        return f'{device.company} {device.model} {device.series} {qty} шт. перемещен СКЛАД --> {dst} '
 
+
+
+
+
+        return f'Со склада забрали {device.type}: {device.model} {device.series} {qty} шт. в {dept} отдел.'
+
+    def __check_amount(self):
+        if self.__store[equipment.type_eq][model][series] == 0:
+            del self.__store[equipment.type_eq][model][series]
+        if not self.__store[equipment.type_eq][model]:
+            del self.__store[equipment.type_eq][model]
 
 
 class Equipments:
-    def __init__(self,model,series):
+
+    def __init__(self,company,model,series):
+        self.company = company
         self.model = model
         self.series = series
+        self.type = self.__class__.__name__
 
-    @property
-    def type_equipment(self):
-        return self.__class__.__name__
+    @abstractmethod
+    def action(self):
+        pass
 
     def __repr__(self):
-        f'Модель: {self.model} Серия: {self.series}'
+        return f'{self.company} {self.model} {self.series}'
 
 class Printer(Equipments):
-    def __init__(self,model,series):
-        super().__init__(model,series)
+
+    def __init__(self,company,model,series):
+        super().__init__(company,model,series)
 
     def action(self):
-        return f'Принтер {self.model} {self.series} печатает.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
-
+        return f'Принтер {self.company} {self.model} {self.series} печатает.'
 
 class Scanner(Equipments):
-    def __init__(self,model,series):
-        super().__init__(model,series)
+
+    def __init__(self,company,model,series):
+        super().__init__(company,model,series)
 
     def action(self):
-        return f'Сканер {self.model} {self.series} сканирует.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
-
+        return f'Сканер {self.company} {self.model} {self.series} сканирует.'
 
 class Xerox(Equipments):
-    def __init__(self,model,series):
-        super().__init__(model,series)
+
+    def __init__(self,company,model,series):
+        super().__init__(company,model,series)
 
     def action(self):
-        return f'Ксерокс {self.model} {self.series} делает копию.'
-
-    def __str__(self):
-        return f'Модель: {self.model} Серия: {self.series}'
+        return f'Ксерокс {self.company} {self.model} {self.series} копирует.'
 
 
 if __name__ == '__main__':
-
     store = Store()
-    equipment_1 = Printer('HP', 'Laser 107WR 209U7A')
-    store.add_to_store(equipment_1)
-    store.del_from_store(equipment_1,'IT')
+    printer = Printer('HP','LaserJet', 'P1006')
+    print(store.add_to(printer,6))
+    print(store.transfer_from_to(printer,2,'IT'))
+    print(store.transfer_from_to(printer,2,'MGR'))
+    print(store.depts)
+    print(store.store)
+
+
+
+
+
+
+
+
+
 
