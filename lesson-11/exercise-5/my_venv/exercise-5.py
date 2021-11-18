@@ -48,18 +48,6 @@ class Store:
         return f'{device.company} {device.model} {device.series} {qty} шт. перемещен СКЛАД --> {dst} '
 
 
-
-
-
-        return f'Со склада забрали {device.type}: {device.model} {device.series} {qty} шт. в {dept} отдел.'
-
-    def __check_amount(self):
-        if self.__store[equipment.type_eq][model][series] == 0:
-            del self.__store[equipment.type_eq][model][series]
-        if not self.__store[equipment.type_eq][model]:
-            del self.__store[equipment.type_eq][model]
-
-
 class Equipments:
 
     def __init__(self,company,model,series):
@@ -103,11 +91,14 @@ class Xerox(Equipments):
 if __name__ == '__main__':
     store = Store()
     printer = Printer('HP','LaserJet', 'P1006')
-    print(store.add_to(printer,6))
-    print(store.transfer_from_to(printer,2,'IT'))
-    print(store.transfer_from_to(printer,2,'MGR'))
-    print(store.depts)
-    print(store.store)
+
+
+
+    #print(store.add_to(printer,6))
+    #print(store.transfer_from_to(printer,2,'IT'))
+    #print(store.transfer_from_to(printer,2,'MGR'))
+    #print(store.depts)
+    #print(store.store)
 
 
 
