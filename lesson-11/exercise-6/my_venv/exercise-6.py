@@ -11,24 +11,15 @@ from abc import abstractmethod
 class CheckParameters:
 
     def __set__(self, instance, value):
-        print(value)
-        if isinstance(value,int):
-            setattr(instance,self.tmp_name,value)
-        else:
-            raise ValueError
+       instance._amount = value
 
-    def __set_name__(self, owner, name):
-        self.tmp_name = '_' + name
-        print(self.tmp_name)
-
-    def __get__(self, instance, owner):
-        return instance._amount
 
 
 class Store:
 
     _STORE = {'Printer':{},'Scanner':{},'Xerox':{}}
     _AMOUNT = CheckParameters()
+
 
     def __init__(self):
         self.store = Store._STORE
@@ -37,6 +28,7 @@ class Store:
     @classmethod
     def receive(cls, device, amount):
         cls._AMOUNT = amount
+
         tmp_dict = cls._STORE[device.type]    #cls._store[device.type]
         company, model, series = str(device).split()
         for i in (company, model):
@@ -118,3 +110,4 @@ if __name__ == '__main__':
     printer_2 = Printer('HP','LaserJet', 'P1007')
     store.receive(printer_1,2)
     store.receive(printer_2,'rt')
+
