@@ -13,39 +13,42 @@ from abc import abstractmethod
 class Store:
 
     def __init__(self):
-        self.store = {'Printer':{},'Scanner':{},'Xerox':{}}
-        self.depts = {'IT' :{'Printer':{},'Scanner':{},'Xerox':{}},
-                      'MGR':{'Printer':{},'Scanner':{},'Xerox':{}}}
+        self._store = {'Printer':{},'Scanner':{},'Xerox':{}}
 
+    def receive(self, device, amount):
+        tmp_dict = self._store[device.type]
+        company, model, series = str(device).split()
+        for i in (company, model):
+            tmp_dict = tmp_dict.setdefault(i, {})
+        tmp_dict.setdefault(series, amount)
+        print(f'Cклад получил оборудование {device.type}: {company} {model} {series} - {amount} шт.')
 
-    def add_to(self,device,qty,to=None):   # Добавление устройств в различные подразделения (по умолчанию на склад)
-        if to is None:
-            to = self.store
-        to[device.type].setdefault(device.company,{})                              # Компания устройства
-        to[device.type][device.company].setdefault(device.model,{})                # Модель устройства
-        to[device.type][device.company][device.model].setdefault(device.series, 0) # Серия устройства
-        to[device.type][device.company][device.model][device.series] += qty
-        return f'На склад добавлен {device.type}: {device.company} {device.model} {device.series} {qty} шт.'
-
-
-    def transfer_from_to(self,device,qty,dst):
+    def transfer(self, device, amount, target):
+        tmp_dict = self._store[device.type]
+        company, model, series = str(device).split()
         try:
-            amount = self.store[device.type][device.company][device.model][device.series]
-        except KeyError:
-            return f'{device.type}: {device.company} {device.model} {device.series} не обнаружен.'
+            if amount > tmp_dict[company][model][series]:
+                raise ValueError
+        except (KeyError, ValueError):
+            return f'Оборудование {device.type}: {company} {model} {series} отсутсвует или нет в таком кол-ве на складе.'
         else:
-            if amount < qty:
-                return f'Такого количества {device.type}: {device.company} {device.model} {device.series} нет.'
-            else:
-                self.store[device.type][device.company][device.model][device.series] -= qty
-                self.add_to(device,qty, self.depts[dst]) # Передаем со склада в подразделение
-                if (amount - qty) == 0:
-                    del self.store[device.type][device.company][device.model][device.series]
-                if not self.store[device.type][device.company][device.model]:
-                    del self.store[device.type][device.company][device.model]
-                if not self.store[device.type][device.company]:
-                    del self.store[device.type][device.company]
-        return f'{device.company} {device.model} {device.series} {qty} шт. перемещен СКЛАД --> {dst} '
+            tmp_dict[company][model][series] -= amount
+            if tmp_dict[company][model][series] == 0:
+                del tmp_dict[company][model][series]
+            if not tmp_dict[company][model]:
+                del tmp_dict[company][model]
+            if not tmp_dict[company]:
+                del tmp_dict[company]
+            print(f'Склад выдал ({device.type}): {company} {model} {series} - {amount} шт. --> {target} отделу.')
+            return (device, amount)
+
+    def qty(self,device):
+        tmp_dict = self._store[device.type]
+        company, model, series = str(device).split()
+        try:
+            return tmp_dict[company][model][series]
+        except:
+            return 0
 
 
 class Equipments:
@@ -90,15 +93,25 @@ class Xerox(Equipments):
 
 if __name__ == '__main__':
     store = Store()
-    printer = Printer('HP','LaserJet', 'P1006')
-
-
-
-    #print(store.add_to(printer,6))
-    #print(store.transfer_from_to(printer,2,'IT'))
-    #print(store.transfer_from_to(printer,2,'MGR'))
-    #print(store.depts)
-    #print(store.store)
+    printer_1 = Printer('HP','LaserJet', 'P1006')
+    printer_2 = Printer('HP','LaserJet', 'P1007')
+    scanner_1 = Scanner('EPSON', 'Perfection', 'V600')
+    scanner_2 = Scanner('EPSON', 'Expression', '12000XL')
+    xerox_1 = Xerox('Canon', 'Super', '3600KL')
+    xerox_2 = Xerox('Xerox', 'Standart', 'B1025DNA')
+    print(f'{printer_2.action()}\n'
+          f'{scanner_2.action()}\n')
+    store.receive(printer_1, 4)
+    store.receive(scanner_1, 6)
+    store.receive(xerox_1, 2)
+    print(f'\nКол-во принтеров 1 на складе: {store.qty(printer_1)}\n'
+          f'Кол-во принтеров 2 на складе: {store.qty(printer_2)}\n')
+    store.transfer(scanner_1,4,'MANAGERS')
+    store.transfer(xerox_1, 2,'ACCOUNT')
+    store.transfer(printer_1,2,'IT')
+    print(f'\nКол-во сканеров 1 на складе: {store.qty(scanner_1)}\n'
+          f'Кол-во ксероксов 1 на складе: {store.qty(xerox_1)}\n'
+          f'Кол-во принтеров 1 на складе: {store.qty(printer_1)}\n')
 
 
 
