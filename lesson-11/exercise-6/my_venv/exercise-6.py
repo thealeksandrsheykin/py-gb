@@ -8,52 +8,57 @@
 
 from abc import abstractmethod
 
-class CheckParameters:
 
-    def __set__(self, instance, value):
-       instance._amount = value
-
-
-
+class WrongParameter(Exception):
+    def __init__(self,msg):
+        self.msg =msg
 class Store:
 
-    _STORE = {'Printer':{},'Scanner':{},'Xerox':{}}
-    _AMOUNT = CheckParameters()
-
-
     def __init__(self):
-        self.store = Store._STORE
-        self.amount = Store._AMOUNT
 
-    @classmethod
-    def receive(cls, device, amount):
-        cls._AMOUNT = amount
+        self.store = {'Printer':{},'Scanner':{},'Xerox':{}}
+        self.amount = 0
 
-        tmp_dict = cls._STORE[device.type]    #cls._store[device.type]
+    @property
+    def _amount(self):
+        return self.amount
+
+    @_amount.setter
+    def _amount(self,value):
+        if isinstance(value,str):
+            raise WrongParameter('Кол-во оборудования  не должно быть строковым значением...')
+        else:
+            self.amount = value
+
+
+    def receive(self, device, amount):
+        self._amount = amount
+        tmp_dict = self.store[device.type]    #cls._store[device.type]
         company, model, series = str(device).split()
         for i in (company, model):
             tmp_dict = tmp_dict.setdefault(i, {})
         tmp_dict.setdefault(series, amount)
-        print(f'Cклад получил оборудование {device.type}: {company} {model} {series} - {amount} шт.')
+        print(f'Cклад получил оборудование {device.type}: {company} {model} {series} - {self.amount} шт.')
 
     def transfer(self, device, amount, target):
-        tmp_dict = self._store[device.type]
+        self._amount = amount
+        tmp_dict = self.store[device.type]
         company, model, series = str(device).split()
         try:
-            if amount > tmp_dict[company][model][series]:
+            if self.amount > tmp_dict[company][model][series]:
                 raise ValueError
         except (KeyError, ValueError):
-            return f'Оборудование {device.type}: {company} {model} {series} отсутсвует или нет в таком кол-ве на складе.'
+            print(f'Оборудование {device.type}: {company} {model} {series} отсутсвует или нет в таком кол-ве на складе.')
         else:
-            tmp_dict[company][model][series] -= amount
+            tmp_dict[company][model][series] -= self.amount
             if tmp_dict[company][model][series] == 0:
                 del tmp_dict[company][model][series]
             if not tmp_dict[company][model]:
                 del tmp_dict[company][model]
             if not tmp_dict[company]:
                 del tmp_dict[company]
-            print(f'Склад выдал ({device.type}): {company} {model} {series} - {amount} шт. --> {target} отделу.')
-            return (device, amount)
+            print(f'Склад выдал ({device.type}): {company} {model} {series} - {self.amount} шт. --> {target} отделу.')
+            return (device, self.amount)
 
     def qty(self,device):
         tmp_dict = self._store[device.type]
@@ -108,6 +113,9 @@ if __name__ == '__main__':
     store = Store()
     printer_1 = Printer('HP','LaserJet', 'P1006')
     printer_2 = Printer('HP','LaserJet', 'P1007')
-    store.receive(printer_1,2)
-    store.receive(printer_2,'rt')
+    store.receive(printer_1,4)
+    store.receive(printer_2,1)
+    store.transfer(printer_1,2,'IT')
+    store.transfer(printer_1,2, 'MANAGERS')
+
 
