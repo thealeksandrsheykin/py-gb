@@ -1,0 +1,56 @@
+{
+    "my_project_1": {
+        "type": "directory",
+        "path": "./my_project_1",
+		"sub" :
+            {
+                "settings_1": {
+                    "type": "directory",
+                    "path": "./my_project_1/settings_1"
+                },
+                "mainapp_1": {
+                    "type": "directory",
+                    "path": "./my_project_1/mainapp_1"
+                },
+                "adminapp_1": {
+                    "type": "directory",
+                    "path": "./my_project_1/adminapp_1"
+                 },
+                "authapp_1": {
+                    "type": "directory",
+                    "path": "./my_project_1/authapp_1"
+                }
+            }
+    },
+    "my_project_2": {
+        "type": "directory",
+        "path": "./my_project_2",
+		"sub" :
+            {
+                "settings_2": {
+                    "type": "directory",
+                    "path": "./my_project_2/settings_2"
+                },
+                "mainapp_2": {
+                    "type": "directory",
+                    "path": "./my_project_2/mainapp_2"
+                },
+                "adminapp_2": {
+                    "type": "directory",
+                    "path": "./my_project_2/adminapp_2"
+                 },
+                "authapp_2": {
+                    "type": "directory",
+                    "path": "./my_project_2/authapp_2"
+                },
+                "text_2": {
+                    "type": "directory",
+                    "path": "./my_project_2/text_2"
+                }
+            }
+    },
+    "my_project_3": {
+        "type": "directory",
+        "path": "./my_project_3"
+    }
+}
